@@ -1,7 +1,8 @@
-package dev.jiwonlee.java.rmi;
+package dev.jiwonlee.java.rmi.client;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import dev.jiwonlee.java.rmi.IService;
 
 public class Client {
     private Client() {
@@ -9,14 +10,15 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            String host = (args.length < 1) ? "localhost" : args[0];
-            int port = 1099;
-
+            String host = args[0];
+            int port = Integer.parseInt(args[1]);
             Registry registry = LocateRegistry.getRegistry(host, port);
 
             IService stub = (IService) registry.lookup("test-rmi-server");
-
-            System.out.println("Server response: " + stub.call("Hello World!"));
+            String request = "How are you?";
+            System.out.println("I: " + request);
+            String response = stub.call(request);
+            System.out.println("Server: " + response);
         } catch (Exception e) {
             e.printStackTrace();
         }
